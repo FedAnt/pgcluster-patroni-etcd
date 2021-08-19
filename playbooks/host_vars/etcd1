@@ -1,0 +1,2 @@
+hostname: etcd1
+fqdn: etcd1.somedomain.local

@@ -1,0 +1,30 @@
+--- 
+
+- name: Add an Apt signing key for postgresql
+  ansible.builtin.apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Add postgresql repository postgresql
+  ansible.builtin.apt_repository: 
+    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main' 
+    state: present
+    update_cache: true
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  register: apt_action
+  retries: 10
+  until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+
+- name: Install apt - HAProxy + pgclient + pgcontrib (pgbench)
+  apt: 
+    pkg:
+    - haproxy
+    - postgresql-client-12
+    - postgresql-contrib
+    state: present
+  register: apt_action
+  retries: 10
+  until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)

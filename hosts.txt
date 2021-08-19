@@ -1,0 +1,22 @@
+[TEST_DB]
+db1  ansible_host=192.168.1.121
+
+[TEST_ETCD]
+etcd1  ansible_host=192.168.1.131
+
+[STARING_DB]
+db1  ansible_host=192.168.1.121
+db2  ansible_host=192.168.1.122
+
+[STARING_ETCD]
+etcd1  ansible_host=192.168.1.131
+etcd2  ansible_host=192.168.1.132
+etcd3  ansible_host=192.168.1.133
+
+[STARING_HAPROXY]
+haproxy  ansible_host=192.168.1.141
+
+[STARING_ALL:children]
+STARING_DB
+STARING_ETCD
+STARING_HAPROXY

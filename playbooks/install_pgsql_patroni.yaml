@@ -1,0 +1,10 @@
+- name: Main playlist - Install PG-Cluster
+  hosts: STARING_DB
+  become: yes
+
+  tasks:
+    - import_tasks: tasks/set_auth_key_from_file.yaml
+    - import_tasks: tasks/prepare_srv.yaml
+    - import_tasks: tasks/install_pgsql.yaml
+    - import_tasks: tasks/setup_pgsql.yaml
+    - import_tasks: tasks/restart.yaml

@@ -1,0 +1,10 @@
+- name: Main playlist - Install HAProxy
+  hosts: STARING_HAPROXY
+  become: yes
+
+  tasks:
+    - import_tasks: tasks/set_auth_key_from_file.yaml
+    - import_tasks: tasks/prepare_srv.yaml
+    - import_tasks: tasks/install_haproxy.yaml
+    - import_tasks: tasks/setup_haproxy.yaml
+    - import_tasks: tasks/restart.yaml

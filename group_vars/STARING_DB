@@ -1,0 +1,6 @@
+---
+
+pgsql_user_repl: repl
+pgsql_pass_repl: somepassword
+pgsql_user_superuser: postgres
+pgsql_pass_superuser: somepassword

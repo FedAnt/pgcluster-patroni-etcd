@@ -1,0 +1,22 @@
+---
+
+- name: Restart server
+  reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+
+# - name: Show cluster health
+#   ansible.builtin.command: etcdctl cluster-health
+#   register: health
+
+# - name: Debug registered var
+#   ansible.builtin.debug: 
+#     var: health.stdout_lines

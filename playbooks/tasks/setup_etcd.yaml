@@ -1,0 +1,41 @@
+---
+
+- name: Enable service etcd
+  ansible.builtin.service:
+    name: "etcd"
+    enabled: yes
+    state: started
+
+- name: Copy configuration file etcd
+  ansible.builtin.template:
+    src: "../../templates/etcd/{{ hostname }}.j2"
+    dest: "/etc/default/etcd"
+    mode: 0755
+  # tags: install,systemd
+
+- name: Clear /var/lib/etcd/default/member/snap/*
+  ansible.builtin.file:
+    path: /var/lib/etcd/default/member/snap
+    state: "{{ item }}"
+    owner: etcd
+    group: etcd
+  with_items:
+    - absent
+    - directory
+
+- name: Clear /var/lib/etcd/default/member/wal/*
+  ansible.builtin.file:
+    path: /var/lib/etcd/default/member/wal
+    state: "{{ item }}"
+    owner: etcd
+    group: etcd
+  with_items:
+    - absent
+    - directory
+
+- name: Start and Enable service etcd
+  systemd:
+    name: "etcd"
+    state: started
+    enabled: yes
+    daemon_reload: yes

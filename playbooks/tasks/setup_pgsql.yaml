@@ -1,0 +1,50 @@
+---
+
+- name: Disable service postgresql
+  ansible.builtin.service:
+    name: "postgresql"
+    enabled: no
+    state: stopped
+
+- name: Copy configuration file patroni.service
+  ansible.builtin.template:
+    src: "../../upload/patroni/patroni.service"
+    dest: "/etc/systemd/system/patroni.service"
+    mode: 0755
+  # tags: install,systemd
+
+- name: Copy configuration files for patroni
+  ansible.builtin.template:
+    src: "../../templates/patroni/{{ hostname }}.j2"
+    dest: /etc/patroni.yml
+    owner: devops
+    group: devops
+    mode: '0775'
+  
+- name: Copy backup_wal.sh and restore_wal.sh
+  ansible.builtin.copy:
+    src: "../../upload/patroni/{{ item }}"
+    dest: "/usr/local/bin/"
+    owner: devops
+    group: devops
+    mode: '0775'
+  with_items:
+    - backup_wal.sh
+    - restore_wal.sh
+
+- name: Clear all directories and files /var/lib/postgresql/13/main/
+  ansible.builtin.file:
+    path: /var/lib/postgresql/13/main
+    state: "{{ item }}"
+    owner: postgres
+    group: postgres
+  with_items:
+    - absent
+    - directory
+
+- name: Start and Enable service patroni
+  systemd:
+    name: "patroni"
+    state: started
+    enabled: yes
+    daemon_reload: yes

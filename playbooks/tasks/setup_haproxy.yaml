@@ -1,0 +1,14 @@
+---
+
+- name: Copy configuration file HAProxy
+  ansible.builtin.template:
+    src: "../../templates/haproxy/haproxy.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+    mode: 0755
+
+- name: Start and Enable service HAProxy
+  systemd:
+    name: "haproxy"
+    state: started
+    enabled: yes
+    daemon_reload: yes

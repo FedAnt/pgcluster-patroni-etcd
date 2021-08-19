@@ -1,0 +1,2 @@
+hostname: haproxy
+fqdn: haproxy.somedomain.local
